@@ -1,70 +1,47 @@
 <script setup lang="ts">
-import { RouterLink, RouterView } from 'vue-router';
-import { supabase } from './lib/supabase';
-import { onMounted } from 'vue';
+import { RouterLink, RouterView, useRouter } from 'vue-router';
+import { useUserStore } from '@/stores/user';
 
-onMounted(async () => {
-  const { data: { session } } = await supabase.auth.getSession();
-  console.log('現在のユーザー:', session?.user);
-});
+const userStore = useUserStore();
+const router = useRouter();
+
+const handleLogout = async () => {
+  await userStore.logout();
+  router.push('/login');
+};
 </script>
 
 <template>
-  <header class="header">
-    <!-- <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" /> -->
-    <nav>
-      <RouterLink to="/">Home</RouterLink>
-      <RouterLink to="/login">Login</RouterLink>
-      <RouterLink to="/about">About</RouterLink>
-    </nav>
-  </header>
-
-  <main class="main-content">
-    <RouterView />
-  </main>
+  <v-app>
+    <v-app-bar color="primary" dark flat>
+      <v-toolbar-title class="font-weight-bold">UPN謎かけアプリ</v-toolbar-title>
+      <v-spacer />
+      <template v-if="userStore.isLoggedIn">
+        <RouterLink to="/riddle">
+          <v-btn icon variant="text" color="white" title="Home">
+            <v-icon>mdi-home</v-icon>
+          </v-btn>
+        </RouterLink>
+        <v-btn icon variant="text" color="white" title="Logout" @click="handleLogout">
+          <v-icon>mdi-logout</v-icon>
+        </v-btn>
+      </template>
+      <template v-else>
+        <RouterLink to="/login">
+          <v-btn icon variant="text" color="white" title="Login">
+            <v-icon>mdi-login</v-icon>
+          </v-btn>
+        </RouterLink>
+      </template>
+    </v-app-bar>
+    <v-main class="bg-grey-lighten-5">
+      <v-container class="py-8">
+        <RouterView />
+      </v-container>
+    </v-main>
+  </v-app>
 </template>
 
 <style scoped>
-.header {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 2rem 0 1rem 0;
-  background: #fff;
-  border-bottom: 1px solid var(--color-border);
-}
-
-.logo {
-  margin-bottom: 1rem;
-}
-
-nav {
-  width: 100%;
-  font-size: 1rem;
-  text-align: center;
-  margin-top: 0.5rem;
-}
-
-nav a.router-link-exact-active {
-  color: var(--color-text);
-}
-
-nav a.router-link-exact-active:hover {
-  background-color: transparent;
-}
-
-nav a {
-  display: inline-block;
-  padding: 0 1rem;
-  border-left: 1px solid var(--color-border);
-}
-
-nav a:first-of-type {
-  border: 0;
-}
-
-.main-content {
-  padding: 2rem;
-  min-height: 60vh;
-}
+/* Vuetifyベースのため追加CSSは最小限 */
 </style>

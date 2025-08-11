@@ -6,6 +6,9 @@ interface User {
     email: string
 }
 
+
+import { supabase } from '@/lib/supabase';
+
 export const useUserStore = defineStore('user', {
     state: () => ({
         currentUser: null as User | null
@@ -16,6 +19,10 @@ export const useUserStore = defineStore('user', {
         },
         clearUser() {
             this.currentUser = null
+        },
+        async logout() {
+            await supabase.auth.signOut();
+            this.clearUser();
         }
     },
     getters: {
