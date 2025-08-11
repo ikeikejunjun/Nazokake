@@ -1,14 +1,36 @@
 <template>
-    <div class="login">
-        <h1>ログイン</h1>
-        <form @submit.prevent="login">
-            <input v-model="email" type="email" placeholder="Email" />
-            <input v-model="password" type="password" placeholder="Password" />
-            <button type="submit">ログイン</button>
-        </form>
-        <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
-        <p v-if="userEmail" class="success">ログイン成功！こんにちは、{{ userEmail }} さん</p>
-    </div>
+  <v-container class="fill-height d-flex align-center justify-center">
+    <v-row justify="center" align="center" style="width:100%;">
+      <v-col cols="12" sm="8" md="4">
+        <v-card elevation="8" class="pa-6">
+          <v-card-title class="text-h5 text-center mb-4">ログイン</v-card-title>
+          <v-form @submit.prevent="login">
+            <v-text-field
+              v-model="email"
+              label="メールアドレス"
+              type="email"
+              class="mb-4"
+              required
+              prepend-inner-icon="mdi-email"
+              autocomplete="username"
+            />
+            <v-text-field
+              v-model="password"
+              label="パスワード"
+              type="password"
+              class="mb-4"
+              required
+              prepend-inner-icon="mdi-lock"
+              autocomplete="current-password"
+            />
+            <v-btn type="submit" color="primary" block size="large" class="mb-2">ログイン</v-btn>
+          </v-form>
+          <v-alert v-if="errorMessage" type="error" class="mt-2">{{ errorMessage }}</v-alert>
+          <v-alert v-if="userEmail" type="success" class="mt-2">ログイン成功！こんにちは、{{ userEmail }} さん</v-alert>
+        </v-card>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script lang="ts" setup>
@@ -45,7 +67,7 @@ const login = async () => {
 </script>
 
 <style scoped>
-.error {
-    color: red;
+.fill-height {
+  min-height: 100vh;
 }
 </style>

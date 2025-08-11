@@ -15,3 +15,9 @@ body {
 .v-application {
   background: #f5f7fa !important;
 }
+
+.logo-img {
+  object-fit: cover;  /* 画像のアスペクト比を保ちながら切り抜く */
+  border-radius: 50%; /* 丸くする */
+  display: block;     /* ブロック要素化（必要に応じて） */
+}
