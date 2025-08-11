@@ -39,7 +39,7 @@ const login = async () => {
             id: data.user.id,
             email: data.user.email ?? ''
         })
-        await router.push('/todos');
+        await router.push('/riddle');
     }
 }
 </script>
