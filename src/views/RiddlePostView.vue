@@ -1,37 +1,152 @@
 <template>
-    <div>
-        <h1>なぞかけ投稿</h1>
-        <select v-model="topic">
-            <option disabled value="">お題を選択</option>
-            <option v-for="t in topics" :key="t.id" :value="t.name">{{ t.name }}</option>
-        </select>
-        <textarea v-model="riddle" placeholder="なぞかけを入力"></textarea>
-        <button @click="postRiddle">投稿</button>
-    </div>
+    <v-container class="py-8">
+        <v-row justify="center">
+            <v-col cols="12" sm="10" md="8" lg="6">
+                <v-card elevation="6" class="pa-6">
+                    <v-card-title class="text-h5 text-center mb-4">なぞかけ投稿</v-card-title>
+                    <v-card-text>
+                        <div v-if="selectedTopicStore.selectedTopic?.topics">
+                            <v-alert type="info" class="mb-4">
+                                【お題】<span class="font-weight-bold">{{ selectedTopicStore.selectedTopic.topics.title }}</span>
+                            </v-alert>
+                        </div>
+                        <v-form @submit.prevent="submitRiddle">
+                            <div class="mb-4" style="font-size:1.1em;">
+                                <div>【お題】<span class="font-weight-bold">{{ selectedTopicStore.selectedTopic?.topics?.title || '（未選択）' }}</span>とかけて</div>
+                                <div>
+                                    <v-text-field
+                                        v-model="toku"
+                                        label="とく（例：○○）"
+                                        required
+                                        hide-details
+                                        class="block-input"
+                                        style="width:100%;max-width:600px;margin:12px 0;"
+                                    />
+                                </div>
+                                <div>ととく。</div>
+                                <div>その心は、どちらも</div>
+                                <div>
+                                    <v-text-field
+                                        v-model="kokoro"
+                                        label="こころ（例：△△）"
+                                        required
+                                        hide-details
+                                        class="block-input"
+                                        style="width:100%;max-width:600px;margin:12px 0;"
+                                    />
+                                </div>
+                            </div>
+                                                        <v-btn
+                                                            type="submit"
+                                                            color="primary"
+                                                            :loading="loading"
+                                                            @click="playExplosion"
+                                                            :disabled="!toku || !kokoro"
+                                                        >投稿する</v-btn>
+                            <div ref="explosion" class="explosion-anim" />
+                            <v-alert v-if="errorMessage" type="error" class="mt-2">{{ errorMessage }}</v-alert>
+                            <v-alert v-if="successMessage" type="success" class="mt-2">{{ successMessage }}</v-alert>
+                        </v-form>
+                    </v-card-text>
+                </v-card>
+            </v-col>
+        </v-row>
+    </v-container>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
-import { supabase } from '@/lib/supabase'
+import { ref, nextTick } from 'vue';
+import gsap from 'gsap';
+import { useRouter } from 'vue-router';
+import { RiddleModel } from '@/models/riddle';
+import { useSelectedTopicStore } from '@/stores/selected_topic';
+import { useAuthStore } from '@/stores/auth';
 
-const topics = ref<{ id: number; name: string }[]>([])
-const topic = ref('')
-const riddle = ref('')
+const router = useRouter();
+const selectedTopicStore = useSelectedTopicStore();
+const authStore = useAuthStore();
 
-onMounted(async () => {
-    const { data, error } = await supabase.from('topics').select('*')
-    if (error) console.error(error)
-    else topics.value = data ?? []
-})
 
-async function postRiddle() {
-    const { error } = await supabase.from('riddles').insert([
-        { topic: topic.value, content: riddle.value }
-    ])
-    if (error) alert(error.message)
-    else {
-        alert('投稿完了')
-        riddle.value = ''
+const toku = ref('');
+const kokoro = ref('');
+const loading = ref(false);
+const errorMessage = ref('');
+const successMessage = ref('');
+const explosion = ref<HTMLElement | null>(null);
+
+const playExplosion = async () => {
+    await nextTick();
+    if (!explosion.value) return;
+    // 画面全体に広がる爆発アニメーション
+    const vw = window.innerWidth;
+    const vh = window.innerHeight;
+    explosion.value.style.width = `${vw * 1.2}px`;
+    explosion.value.style.height = `${vh * 1.2}px`;
+    explosion.value.style.left = '50%';
+    explosion.value.style.top = '50%';
+    explosion.value.style.marginLeft = `-${vw * 0.6}px`;
+    explosion.value.style.marginTop = `-${vh * 0.6}px`;
+    gsap.fromTo(
+        explosion.value,
+        { scale: 0, opacity: 1, background: 'radial-gradient(circle, #ff5252 60%, #b71c1c 100%)' },
+        {
+            scale: 1,
+            opacity: 0,
+            duration: 1.5,
+            ease: 'power2.out',
+            onStart: () => {
+                explosion.value!.style.display = 'block';
+            },
+            onComplete: () => {
+                explosion.value!.style.display = 'none';
+            },
+        }
+    );
+};
+
+const submitRiddle = async () => {
+    errorMessage.value = '';
+    successMessage.value = '';
+    if (!selectedTopicStore.selectedTopic?.topics?.id) {
+        errorMessage.value = 'お題が選択されていません';
+        return;
     }
-}
+        if (!authStore.currentProfile?.id) {
+            errorMessage.value = 'ユーザー情報が取得できません';
+            return;
+        }
+    loading.value = true;
+    const { error } = await RiddleModel.create({
+        topic_id: selectedTopicStore.selectedTopic.topics.id,
+        user_id: authStore.currentProfile.id,
+        toku: toku.value,
+        kokoro: kokoro.value,
+    });
+    loading.value = false;
+    if (error) {
+        errorMessage.value = '投稿に失敗しました';
+    } else {
+        successMessage.value = '投稿が完了しました';
+        toku.value = '';
+        kokoro.value = '';
+        setTimeout(() => router.push('/riddle'), 1000);
+    }
+};
 </script>
+
+<style scoped>
+.explosion-anim {
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    width: 100vw;
+    height: 100vh;
+    margin-left: -50vw;
+    margin-top: -50vh;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9999;
+    display: none;
+    will-change: transform, opacity;
+}
+</style>

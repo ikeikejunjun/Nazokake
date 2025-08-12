@@ -1,12 +1,11 @@
 import { createRouter, createWebHistory } from 'vue-router';
 
-import { supabase } from '@/lib/supabase'; // Supabaseのインポート
 import { useAuthStore } from '@/stores/auth'; // Piniaユーザーストアのインポート
 
 // ページコンポーネントのインポート
 import LoginView from '@/views/LoginView.vue';
 import RiddlePostView from '@/views/RiddlePostView.vue';
-import RiddleHistoryView from '@/views/RiddleHistoryView.vue';
+import RiddleListView from '@/views/RiddleListView.vue';
 import TopicDetailView from '@/views/TopicDetailView.vue';
 import TopicPostView from '@/views/TopicPostView.vue';
 import TopicListView from '@/views/TopicListView.vue';
@@ -27,8 +26,8 @@ const router = createRouter({
   },
   {
     path: '/riddle',
-    name: 'RiddleHistory',
-    component: RiddleHistoryView,
+    name: 'Riddle',
+    component: RiddleListView,
     meta: { requiresAuth: true } // 認証が必要なルート
   },
   {
