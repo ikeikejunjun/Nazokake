@@ -73,6 +73,11 @@ const handleLogout = async () => {
               <v-icon>mdi-home</v-icon>
             </v-btn>
           </RouterLink>
+          <RouterLink to="/topic">
+            <v-btn icon variant="text" color="primary" title="Topic一覧">
+              <v-icon>mdi-lightbulb-outline</v-icon>
+            </v-btn>
+          </RouterLink>
           <v-btn icon variant="text" color="primary" title="Logout" @click="handleLogout">
             <v-icon>mdi-logout</v-icon>
           </v-btn>

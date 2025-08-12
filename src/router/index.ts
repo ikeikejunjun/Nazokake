@@ -7,9 +7,9 @@ import { useUserStore } from '@/stores/user'; // Piniaユーザーストアの�
 import LoginView from '@/views/LoginView.vue';
 import RiddlePostView from '@/views/RiddlePostView.vue';
 import RiddleHistoryView from '@/views/RiddleHistoryView.vue';
-import TopicSettingsView from '@/views/TopicSettingsView.vue';
+import TopicDetailView from '@/views/TopicDetailView.vue';
 import TopicPostView from '@/views/TopicPostView.vue';
-import TopicListView from '@/views/TopicList.vue';
+import TopicListView from '@/views/TopicListView.vue';
 
 
 // ルート定義
@@ -44,9 +44,9 @@ const router = createRouter({
     meta: { requiresAuth: true } // 認証が必要なルート
   },
   {
-    path: '/topic/settings',
-    name: 'TopicSettings',
-    component: TopicSettingsView,
+    path: '/topic/:id',
+    name: 'TopicDetail',
+    component: TopicDetailView,
     meta: { requiresAuth: true } // 認証が必要なルート
   },
   {
@@ -62,13 +62,15 @@ const router = createRouter({
 ]});
 
 // ルートガード設定
-router.beforeEach((to) => {
+router.beforeEach(async (to, from, next) => {
   if (to.meta.requiresAuth) {
     const userStore = useUserStore();
     if (!userStore.isLoggedIn) {
-      return { name: 'login' };
+      next({ name: 'Login' });
+      return;
     }
   }
+  next();
 });
 
 export default router;
