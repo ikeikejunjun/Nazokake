@@ -28,7 +28,14 @@
                         <RouterLink to="/topic">
                             <v-btn color="primary" variant="text">一覧に戻る</v-btn>
                         </RouterLink>
-                        <v-btn color="primary" variant="text" @click="deleteTopic">削除</v-btn>
+                                                <template v-if="selectedTopicStore.selectedTopic?.topics?.id === topic?.id">
+                                                    <v-chip color="yellow-darken-2" class="ml-2">現在のお題です</v-chip>
+                                                    <v-btn color="primary" variant="text" :disabled="true">現在のお題に設定する</v-btn>
+                                                </template>
+                                                <template v-else>
+                                                    <v-btn color="primary" variant="text" @click="setCurrentTopic">現在のお題に設定する</v-btn>
+                                                </template>
+                        <v-btn color="red" variant="text" @click="deleteTopic">削除</v-btn>
                     </v-card-actions>
                 </v-card>
             </v-col>
@@ -40,20 +47,27 @@
 
 <script setup lang="ts">
 
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-
 import { TopicModel } from '@/models/topic';
 import type { Topic } from '@/models/topic';
+import { useSelectedTopicStore } from '@/stores/selected_topic';
 
 const route = useRoute();
 const router = useRouter();
+const selectedTopicStore = useSelectedTopicStore();
 
 const topic = ref<Topic | null>(null);
 const errorMessage = ref('');
 
 const fetchTopic = async () => {
     topic.value = await TopicModel.fetchById(route.params.id as string);
+};
+
+const setCurrentTopic = async () => {
+    if (topic.value && selectedTopicStore.selectedTopic) {
+        await selectedTopicStore.updateSelectedTopic(selectedTopicStore.selectedTopic.id, { topic_id: topic.value.id });
+    }
 };
 
 const formatDate = (date: string) => {
@@ -74,7 +88,11 @@ const deleteTopic = async () => {
     }
 };
 
-onMounted(fetchTopic);
+onMounted(() => {
+    selectedTopicStore.fetchSelectedTopic();
+    selectedTopicStore.subscribeRealtime();
+    fetchTopic();
+});
 </script>
 
 <style scoped></style>
