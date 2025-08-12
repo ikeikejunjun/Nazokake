@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { RouterLink, RouterView, useRouter } from 'vue-router';
-import { useUserStore } from '@/stores/user';
+import { useAuthStore } from '@/stores/auth';
 import { ref, watch, nextTick, onMounted } from 'vue';
 import gsap from 'gsap';
 
-const userStore = useUserStore();
+const authStore = useAuthStore();
 const router = useRouter();
 
 const showLogo = ref(false);
@@ -16,7 +16,7 @@ function clearLogoTimeouts() {
   logoTimeouts = [];
 }
 
-watch(() => userStore.isLoggedIn, async (val) => {
+watch(() => authStore.isLoggedIn, async (val) => {
   clearLogoTimeouts();
   if (val) {
     showLogo.value = true;
@@ -47,7 +47,7 @@ onMounted(() => {
 });
 
 const handleLogout = async () => {
-  await userStore.logout();
+  await authStore.logout();
   router.push('/login');
 };
 </script>
@@ -67,7 +67,7 @@ const handleLogout = async () => {
     </v-main>
     <v-footer app color="white" class="justify-center">
       <div class="d-flex align-center justify-center" style="width:100%;">
-        <template v-if="userStore.isLoggedIn">
+        <template v-if="authStore.isLoggedIn">
           <RouterLink to="/riddle">
             <v-btn icon variant="text" color="primary" title="Home">
               <v-icon>mdi-home</v-icon>

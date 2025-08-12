@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router';
 
 import { supabase } from '@/lib/supabase'; // Supabaseのインポート
-import { useUserStore } from '@/stores/user'; // Piniaユーザーストアのインポート
+import { useAuthStore } from '@/stores/auth'; // Piniaユーザーストアのインポート
 
 // ページコンポーネントのインポート
 import LoginView from '@/views/LoginView.vue';
@@ -64,8 +64,8 @@ const router = createRouter({
 // ルートガード設定
 router.beforeEach(async (to, from, next) => {
   if (to.meta.requiresAuth) {
-    const userStore = useUserStore();
-    if (!userStore.isLoggedIn) {
+    const authStore = useAuthStore();
+    if (!authStore.isLoggedIn) {
       next({ name: 'Login' });
       return;
     }

@@ -1,19 +1,13 @@
 
-
 import { supabase } from '@/lib/supabase';
-
-
-export interface TopicProfile {
-    id: string;
-    name: string;
-}
+import type { Profile } from './profile';
 
 export interface Topic {
     id: string; // uuid
     title: string;
     created_by: string; // uuid (profiles.id)
     created_at: string; // ISO8601 timestamp
-    profiles?: TopicProfile | null;
+    profiles?: Profile | null;
 }
 
 export class TopicModel {

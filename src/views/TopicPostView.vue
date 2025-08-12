@@ -28,14 +28,14 @@
 
 import { ref } from 'vue';
 
-import { useUserStore } from '@/stores/user';
+import { useAuthStore } from '@/stores/auth';
 import { useRouter } from 'vue-router';
 import { TopicModel } from '@/models/topic';
 
 const title = ref('');
 const errorMessage = ref('');
 const successMessage = ref('');
-const userStore = useUserStore();
+const authStore = useAuthStore();
 const router = useRouter();
 
 const postTopic = async () => {
@@ -47,7 +47,7 @@ const postTopic = async () => {
     }
         const newTopic = {
             title: title.value,
-            created_by: userStore.currentUser?.id ?? '',
+            created_by: authStore.currentProfile?.id ?? '',
         };
         const { error } = await TopicModel.create(newTopic);
         if (error) {

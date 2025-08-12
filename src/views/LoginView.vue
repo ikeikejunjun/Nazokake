@@ -35,16 +35,19 @@
 
 <script lang="ts" setup>
 import { ref } from 'vue';
-import { supabase } from '../lib/supabase';
+import { supabase } from '@/lib/supabase';
 import { useRouter } from 'vue-router';
-import { useUserStore } from '../stores/user'
-const router = useRouter();
+import { useAuthStore } from '@/stores/auth'; // Piniaユーザーストアのインポート
+import type { Profile } from '@/models/profile';
+import { ProfileModel } from '@/models/profile';
 
+const router = useRouter();
 const email = ref('');
 const password = ref('');
 const errorMessage = ref('');
 const userEmail = ref('');
-const userStore = useUserStore()
+const authStore = useAuthStore();
+const userProfile = ref<Profile | null>(null);
 
 const login = async () => {
     errorMessage.value = '';
@@ -57,10 +60,15 @@ const login = async () => {
     if (error) {
         errorMessage.value = error.message;
     } else {
-        userStore.setUser({
-            id: data.user.id,
-            email: data.user.email ?? ''
-        })
+        userProfile.value = await ProfileModel.fetchById(data.user.id);
+        if (!userProfile.value) {
+            errorMessage.value = 'ユーザープロフィールが見つかりません';
+            return;
+        }
+        authStore.setProfile(
+            userProfile.value!,
+            data.user.email ?? ''
+        )
         await router.push('/riddle');
     }
 }
