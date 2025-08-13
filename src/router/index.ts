@@ -10,7 +10,10 @@ import RiddleListView from '@/views/riddle/RiddleListView.vue';
 import TopicDetailView from '@/views/topic/TopicDetailView.vue';
 import TopicPostView from '@/views/topic/TopicPostView.vue';
 import TopicListView from '@/views/topic/TopicListView.vue';
+import InviteView from '@/views/auth/InviteView.vue';
 import SignUpView from '@/views/auth/SignUpView.vue';
+import ProfileEditView from '@/views/profile/ProfileEditView.vue';
+import ProfileDetailView from '@/views/profile/ProfileDetailView.vue';
 
 
 // ルート定義
@@ -57,13 +60,31 @@ const router = createRouter({
     meta: { requiresAuth: true } // 認証が必要なルート
   },
   {
-    path: '/banana-ice-2025', // 推測されにくいサインアップ用URI
+    path: '/auth/invite',
+    name: 'Invite',
+    component: InviteView,
+    meta: { requiresAuth: true } // 管理者のみアクセス想定
+  },
+  {
+    path: '/auth/signup',
     name: 'SignUp',
     component: SignUpView
   },
   {
     path: '/:pathMatch(.*)*', // 404用
     redirect: '/login'
+  },
+  {
+    path: '/profile/edit',
+    name: 'ProfileEdit',
+    component: ProfileEditView,
+    meta: { requiresAuth: true } // 認証が必要なルート
+  },
+  {
+    path: '/profile/:id',
+    name: 'ProfileDetail',
+    component: ProfileDetailView,
+    meta: { requiresAuth: true } // 認証が必要なルート
   }
 ]});
 

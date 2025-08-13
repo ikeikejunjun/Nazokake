@@ -58,7 +58,11 @@ const handleLogout = async () => {
       <img v-if="showLogoImg" src="@/images/upn_logo.jpg" alt="UPNロゴ" class="logo-img" />
     </div>
     <v-app-bar color="primary" dark flat>
-      <v-toolbar-title class="font-weight-bold text-center w-100">UPN謎かけアプリ</v-toolbar-title>
+      <v-toolbar-title class="font-weight-bold text-center w-100">
+        UPN
+        <RouterLink to="/auth/invite" class="stealth-link">謎かけ</RouterLink>
+        アプリ
+      </v-toolbar-title>
     </v-app-bar>
     <v-main class="bg-grey-lighten-5">
       <v-container class="py-8">
@@ -76,6 +80,11 @@ const handleLogout = async () => {
           <RouterLink to="/topic">
             <v-btn icon variant="text" color="primary" title="Topic一覧">
               <v-icon>mdi-lightbulb-outline</v-icon>
+            </v-btn>
+          </RouterLink>
+          <RouterLink to="/profile/edit">
+            <v-btn icon variant="text" color="primary" title="プロフィール編集">
+              <v-icon>mdi-account-edit</v-icon>
             </v-btn>
           </RouterLink>
           <v-btn icon variant="text" color="primary" title="Logout" @click="handleLogout">
@@ -114,4 +123,18 @@ const handleLogout = async () => {
   filter: drop-shadow(0 2px 16px rgba(0,0,0,0.15));
 }
 /* GSAPで制御するためトランジションは不要 */
+
+/* リンク感を消す（stealth-link） */
+.stealth-link {
+  color: inherit;
+  text-decoration: none;
+  cursor: pointer;
+}
+.stealth-link:visited,
+.stealth-link:active,
+.stealth-link:hover,
+.stealth-link:focus {
+  color: inherit;
+  text-decoration: none;
+}
 </style>
