@@ -7,42 +7,27 @@
                     <v-card-text>
                         <div v-if="selectedTopicStore.selectedTopic?.topics">
                             <v-alert type="info" class="mb-4">
-                                【お題】<span class="font-weight-bold">{{ selectedTopicStore.selectedTopic.topics.title }}</span>
+                                【お題】<span class="font-weight-bold">{{ selectedTopicStore.selectedTopic.topics.title
+                                    }}</span>
                             </v-alert>
                         </div>
                         <v-form @submit.prevent="submitRiddle">
                             <div class="mb-4" style="font-size:1.1em;">
-                                <div>【お題】<span class="font-weight-bold">{{ selectedTopicStore.selectedTopic?.topics?.title || '（未選択）' }}</span>とかけて</div>
+                                <div><span class="font-weight-bold">{{
+                                    selectedTopicStore.selectedTopic?.topics?.title || '（未選択）' }}</span> とかけて</div>
                                 <div>
-                                    <v-text-field
-                                        v-model="toku"
-                                        label="とく（例：○○）"
-                                        required
-                                        hide-details
-                                        class="block-input"
-                                        style="width:100%;max-width:600px;margin:12px 0;"
-                                    />
+                                    <v-text-field v-model="toku" label="とく（例：○○）" required hide-details
+                                        class="block-input" style="width:100%;max-width:600px;margin:12px 0;" />
                                 </div>
                                 <div>ととく。</div>
                                 <div>その心は、どちらも</div>
                                 <div>
-                                    <v-text-field
-                                        v-model="kokoro"
-                                        label="こころ（例：△△）"
-                                        required
-                                        hide-details
-                                        class="block-input"
-                                        style="width:100%;max-width:600px;margin:12px 0;"
-                                    />
+                                    <v-text-field v-model="kokoro" label="こころ（例：△△）" required hide-details
+                                        class="block-input" style="width:100%;max-width:600px;margin:12px 0;" />
                                 </div>
                             </div>
-                                                        <v-btn
-                                                            type="submit"
-                                                            color="primary"
-                                                            :loading="loading"
-                                                            @click="playExplosion"
-                                                            :disabled="!toku || !kokoro"
-                                                        >投稿する</v-btn>
+                            <v-btn type="submit" color="primary" :loading="loading" @click="playExplosion"
+                                :disabled="!toku || !kokoro">投稿する</v-btn>
                             <div ref="explosion" class="explosion-anim" />
                             <v-alert v-if="errorMessage" type="error" class="mt-2">{{ errorMessage }}</v-alert>
                             <v-alert v-if="successMessage" type="success" class="mt-2">{{ successMessage }}</v-alert>
@@ -111,10 +96,10 @@ const submitRiddle = async () => {
         errorMessage.value = 'お題が選択されていません';
         return;
     }
-        if (!authStore.currentProfile?.id) {
-            errorMessage.value = 'ユーザー情報が取得できません';
-            return;
-        }
+    if (!authStore.currentProfile?.id) {
+        errorMessage.value = 'ユーザー情報が取得できません';
+        return;
+    }
     loading.value = true;
     const { error } = await RiddleModel.create({
         topic_id: selectedTopicStore.selectedTopic.topics.id,

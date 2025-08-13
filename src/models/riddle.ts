@@ -46,6 +46,16 @@ export class RiddleModel {
         return data as Riddle;
     }
 
+    static async fetchByUserId(userId: string): Promise<Riddle[]> {
+        const { data, error } = await supabase
+            .from('riddles')
+            .select('*, topics(*), profiles(*)')
+            .eq('user_id', userId)
+            .order('created_at', { ascending: false });
+        if (error) throw error;
+        return data as Riddle[];
+    }
+
     // 新規作成
     static async create(newRiddle: Omit<Riddle, 'id' | 'created_at' | 'topics' | 'profiles'>): Promise<{ error?: any }> {
         const { error } = await supabase
@@ -64,7 +74,7 @@ export class RiddleModel {
     }
 
     // 削除
-    
+
     // ページネーション付き全件取得
     static async fetchAllPaginated(page: number, pageSize: number): Promise<Riddle[]> {
         const from = (page - 1) * pageSize;
@@ -77,7 +87,7 @@ export class RiddleModel {
         if (error) throw error;
         return data as Riddle[];
     }
-    
+
     // ページネーション付きお題絞り込み取得
     static async fetchByTopicIdPaginated(topicId: string, page: number, pageSize: number): Promise<Riddle[]> {
         const from = (page - 1) * pageSize;
@@ -91,7 +101,7 @@ export class RiddleModel {
         if (error) throw error;
         return data as Riddle[];
     }
-    
+
     // 削除
     static async delete(id: string): Promise<{ error?: any }> {
         const { error } = await supabase
