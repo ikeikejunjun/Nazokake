@@ -13,8 +13,8 @@
                         </div>
                         <v-form @submit.prevent="submitRiddle">
                             <div class="mb-4" style="font-size:1.1em;">
-                                <div>【お題】<span class="font-weight-bold">{{
-                                    selectedTopicStore.selectedTopic?.topics?.title || '（未選択）' }}</span>とかけて</div>
+                                <div><span class="font-weight-bold">{{
+                                    selectedTopicStore.selectedTopic?.topics?.title || '（未選択）' }}</span> とかけて</div>
                                 <div>
                                     <v-text-field v-model="toku" label="とく（例：○○）" required hide-details
                                         class="block-input" style="width:100%;max-width:600px;margin:12px 0;" />

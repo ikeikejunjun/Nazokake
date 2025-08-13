@@ -43,7 +43,7 @@ const onInvite = async () => {
     // サインアップ用の招待メールを送信
     const baseUrl = import.meta.env.VITE_BASE_URL || window.location.origin;
     const { error } = await supabase.auth.admin.inviteUserByEmail(inviteEmail.value, {
-        redirectTo: baseUrl + '/banana-ice-2025',
+        redirectTo: baseUrl + '/auth/signup',
     });
     loading.value = false;
     if (error) {
