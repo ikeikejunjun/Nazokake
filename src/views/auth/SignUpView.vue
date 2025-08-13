@@ -45,9 +45,21 @@ const passwordRules = [
     (v: string) => v.length >= 6 || '6文字以上で入力してください',
 ];
 
-onMounted(() => {
-    // 招待メールのリンクにemailクエリが含まれている前提
+onMounted(async () => {
     email.value = route.query.email as string || '';
+    // Supabaseの招待リンクのtokenとtypeを取得する
+    const token = route.query.token as string || '';
+    const type = route.query.type as string || '';
+    if (token) {
+        const { data, error } = await supabase.auth.verifyOtp({
+            type: 'signup',
+            token,
+            email: email.value
+        });
+        if (error) {
+            errorMessage.value = error.message;
+        }
+    }
 });
 
 const onSignUp = async () => {
