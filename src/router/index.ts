@@ -4,13 +4,13 @@ import { useAuthStore } from '@/stores/auth'; // Piniaユーザーストアの�
 
 // ページコンポーネントのインポート
 
-import LoginView from '@/views/LoginView.vue';
-import RiddlePostView from '@/views/RiddlePostView.vue';
-import RiddleListView from '@/views/RiddleListView.vue';
-import TopicDetailView from '@/views/TopicDetailView.vue';
-import TopicPostView from '@/views/TopicPostView.vue';
-import TopicListView from '@/views/TopicListView.vue';
-import SignUpView from '@/views/SignUpView.vue';
+import LoginView from '@/views/auth/LoginView.vue';
+import RiddlePostView from '@/views/riddle/RiddlePostView.vue';
+import RiddleListView from '@/views/riddle/RiddleListView.vue';
+import TopicDetailView from '@/views/topic/TopicDetailView.vue';
+import TopicPostView from '@/views/topic/TopicPostView.vue';
+import TopicListView from '@/views/topic/TopicListView.vue';
+import SignUpView from '@/views/auth/SignUpView.vue';
 
 
 // ルート定義

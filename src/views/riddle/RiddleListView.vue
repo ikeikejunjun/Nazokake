@@ -5,14 +5,8 @@
                 <v-card elevation="6" class="pa-6 mb-6">
                     <v-card-title class="text-h5 text-center mb-4 d-flex align-center justify-space-between">
                         <span>なぞかけ一覧</span>
-                        <v-checkbox
-                            v-model="showAll"
-                            label="全てのお題のなぞかけを表示"
-                            hide-details
-                            density="compact"
-                            class="ml-4"
-                            style="min-width:220px;"
-                        />
+                        <v-checkbox v-model="showAll" label="全てのお題のなぞかけを表示" hide-details density="compact" class="ml-4"
+                            style="min-width:220px;" />
                     </v-card-title>
                     <v-card-text>
                         <v-alert v-if="riddles.length === 0" type="info">なぞかけがありません</v-alert>
@@ -22,30 +16,25 @@
                             }">
                                 <div class="riddle-sentence">
                                     <span class="font-weight-bold">{{ riddle.topics?.title || riddle.topic_id
-                                        }}</span>とかけて<br>
+                                    }}</span>とかけて<br>
                                     <span class="font-weight-bold">{{ riddle.toku }}</span>ととく。<br>
                                     その心は、どちらも<span class="font-weight-bold">{{ riddle.kokoro }}</span>
                                 </div>
                                 <div class="riddle-meta mt-2">
                                     <span class="font-weight-bold">【投稿者】</span>{{ riddle.profiles?.name ||
-                                    riddle.user_id }}
+                                        riddle.user_id }}
                                     ／<span class="font-weight-bold">【投稿日時】</span>{{ formatDate(riddle.created_at) }}
                                 </div>
                             </v-list-item>
                         </v-list>
-                                        </v-card-text>
-                                        <v-card-actions class="justify-end" style="flex-wrap: wrap;">
-                                                <v-btn
-                                                    v-if="hasMore"
-                                                    color="secondary"
-                                                    variant="outlined"
-                                                    @click="fetchRiddles()"
-                                                    class="mr-2 mb-2"
-                                                >もっと見る</v-btn>
-                                                <RouterLink to="/riddle/post">
-                                                        <v-btn color="primary" prepend-icon="mdi-plus">なぞかけを投稿</v-btn>
-                                                </RouterLink>
-                                        </v-card-actions>
+                    </v-card-text>
+                    <v-card-actions class="justify-end" style="flex-wrap: wrap;">
+                        <v-btn v-if="hasMore" color="secondary" variant="outlined" @click="fetchRiddles()"
+                            class="mr-2 mb-2">もっと見る</v-btn>
+                        <RouterLink to="/riddle/post">
+                            <v-btn color="primary" prepend-icon="mdi-plus">なぞかけを投稿</v-btn>
+                        </RouterLink>
+                    </v-card-actions>
                 </v-card>
             </v-col>
         </v-row>
