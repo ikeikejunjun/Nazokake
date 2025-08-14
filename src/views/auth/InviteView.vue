@@ -1,6 +1,6 @@
 <template>
     <v-row justify="center">
-        <v-col cols="12" sm="8" md="6" lg="4">
+        <v-col cols="12" sm="12" md="10" lg="8">
             <v-card elevation="6" class="pa-6">
                 <v-card-text>
                     <v-form @submit.prevent="onInvite" ref="formRef" v-model="valid">

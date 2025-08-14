@@ -24,17 +24,6 @@ export class RiddleModel {
         return data as Riddle[];
     }
 
-    // 選択されたお題に一致するなぞかけのみ取得
-    static async fetchByTopicId(topicId: string): Promise<Riddle[]> {
-        const { data, error } = await supabase
-            .from('riddles')
-            .select('*, topics(*), profiles(*)')
-            .eq('topic_id', topicId)
-            .order('created_at', { ascending: false });
-        if (error) throw error;
-        return data as Riddle[];
-    }
-
     // idで詳細取得
     static async fetchById(id: string): Promise<Riddle | null> {
         const { data, error } = await supabase
@@ -44,16 +33,6 @@ export class RiddleModel {
             .single();
         if (error) return null;
         return data as Riddle;
-    }
-
-    static async fetchByUserId(userId: string): Promise<Riddle[]> {
-        const { data, error } = await supabase
-            .from('riddles')
-            .select('*, topics(*), profiles(*)')
-            .eq('user_id', userId)
-            .order('created_at', { ascending: false });
-        if (error) throw error;
-        return data as Riddle[];
     }
 
     // 新規作成
@@ -74,6 +53,13 @@ export class RiddleModel {
     }
 
     // 削除
+    static async delete(id: string): Promise<{ error?: any }> {
+        const { error } = await supabase
+            .from('riddles')
+            .delete()
+            .eq('id', id);
+        return { error };
+    }
 
     // ページネーション付き全件取得
     static async fetchAllPaginated(page: number, pageSize: number): Promise<Riddle[]> {
@@ -102,12 +88,17 @@ export class RiddleModel {
         return data as Riddle[];
     }
 
-    // 削除
-    static async delete(id: string): Promise<{ error?: any }> {
-        const { error } = await supabase
+    // ページネーション付きユーザー絞り込み取得
+    static async fetchByUserIdPaginated(userId: string, page: number, pageSize: number): Promise<Riddle[]> {
+        const from = (page - 1) * pageSize;
+        const to = from + pageSize - 1;
+        const { data, error } = await supabase
             .from('riddles')
-            .delete()
-            .eq('id', id);
-        return { error };
+            .select('*, topics(*), profiles(*)')
+            .eq('user_id', userId)
+            .order('created_at', { ascending: false })
+            .range(from, to);
+        if (error) throw error;
+        return data as Riddle[];
     }
 }

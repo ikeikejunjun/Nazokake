@@ -1,7 +1,7 @@
 <template>
   <v-container class="py-8">
     <v-row justify="center">
-      <v-col cols="12" sm="10" md="8" lg="6">
+      <v-col cols="12" sm="12" md="10" lg="8">
         <v-card elevation="8" class="pa-6">
           <v-form @submit.prevent="login">
             <v-text-field v-model="email" label="メールアドレス" type="email" class="mb-4" required

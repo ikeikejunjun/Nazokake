@@ -1,6 +1,6 @@
 <template>
     <v-row justify="center">
-        <v-col cols="12" sm="10" md="8" lg="6">
+        <v-col cols="12" sm="12" md="10" lg="8">
             <v-card elevation="6" class="pa-6">
                 <v-form @submit.prevent="postTopic">
                     <v-text-field v-model="title" label="お題タイトル" required maxlength="100" class="mb-4"

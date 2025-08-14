@@ -1,19 +1,22 @@
 <template>
-    <v-row justify="center">
-        <v-col cols="12" sm="8" md="6" lg="4">
-            <v-card elevation="6" class="pa-6 mb-6">
-                <v-card-text>
-                    <div class="mb-4">
-                        <div class="font-weight-bold text-lg mb-2">{{ profile?.name || '未設定' }}</div>
-                        <div class="mb-2" style="white-space: pre-line; color: #666;">{{ profile?.bio }}</div>
-                        <div>{{ route.params.id }}</div>
-                    </div>
-                    <div class="mb-2 font-weight-bold">過去のなぞかけ投稿</div>
-                    <RiddleListCard :riddles="riddles" :hasMore="true" :currentUserId="profile?.id" />
-                </v-card-text>
-            </v-card>
-        </v-col>
-    </v-row>
+    <v-container>
+        <v-row justify="center">
+            <v-col cols="12" sm="12" md="10" lg="8">
+                <v-card elevation="6" class="pa-6">
+                    <v-card-text>
+                        <div class="mb-4">
+                            <div class="font-weight-bold text-lg mb-2">{{ profile?.name || '未設定' }}</div>
+                            <div class="mb-2" style="white-space: pre-line; color: #666;">{{ profile?.bio }}</div>
+                            <div>{{ route.params.id }}</div>
+                        </div>
+                        <div class="mb-2 pa-2 font-weight-bold">過去のなぞかけ投稿</div>
+                        <RiddleListCard :riddles="riddles" :hasMore="hasMore" :currentUserId="profile?.id"
+                            @fetch-more="fetchRiddles" />
+                    </v-card-text>
+                </v-card>
+            </v-col>
+        </v-row>
+    </v-container>
 </template>
 
 <script setup lang="ts">
@@ -21,20 +24,39 @@ import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import { ProfileModel } from '@/models/profile';
 import { RiddleModel, type Riddle } from '@/models/riddle';
+import RiddleListCard from '@/components/RiddleListCard.vue';
 
+// ルーター関係
 const route = useRoute();
+// プロフィール関係
 const profile = ref<any>(null);
+// 謎かけ関係
 const riddles = ref<Riddle[]>([]);
+const page = ref(1);
+const pageSize = 50;
+const hasMore = ref(true);
 
-const formatDate = (date: string) => {
-    return new Date(date).toLocaleString('ja-JP');
-};
-
+// 初期表示処理
 onMounted(async () => {
     const userId = route.params.id as string;
     profile.value = await ProfileModel.fetchById(userId);
-    riddles.value = await RiddleModel.fetchByUserId(userId);
+    fetchRiddles();
 });
+
+// なぞかけの取得
+const fetchRiddles = async (reset = false) => {
+    if (reset) {
+        riddles.value = [];
+        page.value = 1;
+        hasMore.value = true;
+    }
+    let data = await RiddleModel.fetchByUserIdPaginated(profile.value.id, page.value, pageSize);
+    if (data.length < pageSize) {
+        hasMore.value = false;
+    }
+    riddles.value = [...riddles.value, ...data];
+    page.value++;
+};
 </script>
 
 <style scoped>
