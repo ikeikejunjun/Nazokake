@@ -10,7 +10,7 @@
                             <div>{{ route.params.id }}</div>
                         </div>
                         <div class="mb-2 pa-2 font-weight-bold">過去のなぞかけ投稿</div>
-                        <RiddleListCard :riddles="riddles" :hasMore="hasMore" :currentUserId="profile?.id"
+                        <RiddleListCard :riddles="riddles" :hasMore="hasMore" :currentUserId="authStore.currentProfile?.id"
                             @fetch-more="fetchRiddles" />
                     </v-card-text>
                 </v-card>
@@ -22,12 +22,14 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
+import { useAuthStore } from '@/stores/auth';
 import { ProfileModel } from '@/models/profile';
 import { RiddleModel, type Riddle } from '@/models/riddle';
 import RiddleListCard from '@/components/RiddleListCard.vue';
 
 // ルーター関係
 const route = useRoute();
+const authStore = useAuthStore();
 // プロフィール関係
 const profile = ref<any>(null);
 // 謎かけ関係
