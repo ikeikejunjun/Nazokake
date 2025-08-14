@@ -1,24 +1,17 @@
 <template>
-    <v-container class="py-8">
-        <v-row justify="center">
-            <v-col cols="12" sm="10" md="8" lg="6">
-                                <RiddleListCard
-                                    :riddles="riddles"
-                                    :hasMore="hasMore"
-                                    :showAll="showAll"
-                                    :currentUserId="authStore.currentProfile?.id"
-                                    @fetch-more="fetchRiddles"
-                                    @update:showAll="val => { showAll = val; }"
-                                >
-                                    <template #actions>
-                                        <RouterLink to="/riddle/post">
-                                            <v-btn color="primary" prepend-icon="mdi-plus">なぞかけを投稿</v-btn>
-                                        </RouterLink>
-                                    </template>
-                                </RiddleListCard>
-            </v-col>
-        </v-row>
-    </v-container>
+    <v-row justify="center">
+        <v-col cols="12" sm="10" md="8" lg="6">
+            <RiddleListCard :riddles="riddles" :hasMore="hasMore" :showAll="showAll"
+                :currentUserId="authStore.currentProfile?.id" @fetch-more="fetchRiddles"
+                @update:showAll="val => { showAll = val; }">
+                <template #actions>
+                    <RouterLink to="/riddle/post">
+                        <v-btn color="primary" prepend-icon="mdi-plus">なぞかけを投稿</v-btn>
+                    </RouterLink>
+                </template>
+            </RiddleListCard>
+        </v-col>
+    </v-row>
 </template>
 
 <script setup lang="ts">

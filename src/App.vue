@@ -1,57 +1,3 @@
-<script setup lang="ts">
-import { RouterLink, RouterView, useRouter } from 'vue-router';
-import { useAuthStore } from '@/stores/auth';
-import { ref, watch, nextTick, onMounted } from 'vue';
-import gsap from 'gsap';
-
-const authStore = useAuthStore();
-const router = useRouter();
-
-const showLogo = ref(false);
-const showLogoImg = ref(false);
-let logoTimeouts: number[] = [];
-
-function clearLogoTimeouts() {
-  logoTimeouts.forEach(id => clearTimeout(id));
-  logoTimeouts = [];
-}
-
-watch(() => authStore.isLoggedIn, async (val) => {
-  clearLogoTimeouts();
-  if (val) {
-    showLogo.value = true;
-    showLogoImg.value = false;
-    await nextTick();
-    // まず白背景のみ表示
-    logoTimeouts.push(window.setTimeout(async () => {
-      showLogoImg.value = true;
-      await nextTick();
-      gsap.fromTo('.logo-img', { opacity: 0 }, { opacity: 1, duration: 0.7 });
-      // 1秒後にロゴをフェードアウト
-      logoTimeouts.push(window.setTimeout(() => {
-        gsap.to('.logo-img', { opacity: 0, duration: 0.7, onComplete: () => {
-          showLogo.value = false;
-          showLogoImg.value = false;
-        }});
-      }, 1000));
-    }, 300)); // 0.3秒白背景のみ
-  } else {
-    showLogo.value = false;
-    showLogoImg.value = false;
-  }
-});
-
-onMounted(() => {
-  // ページ遷移やリロード時にタイムアウトをクリア
-  window.addEventListener('beforeunload', clearLogoTimeouts);
-});
-
-const handleLogout = async () => {
-  await authStore.logout();
-  router.push('/login');
-};
-</script>
-
 <template>
   <v-app>
     <div v-if="showLogo" class="logo-overlay">
@@ -65,7 +11,10 @@ const handleLogout = async () => {
       </v-toolbar-title>
     </v-app-bar>
     <v-main class="bg-grey-lighten-5">
-      <v-container class="py-8">
+      <div v-if="currentViewName" class="view-title">
+        <h2>{{ currentViewName }}</h2>
+      </div>
+      <v-container class="py-1">
         <RouterView />
       </v-container>
     </v-main>
@@ -103,6 +52,70 @@ const handleLogout = async () => {
   </v-app>
 </template>
 
+<script setup lang="ts">
+import { RouterLink, RouterView, useRouter } from 'vue-router';
+import { useAuthStore } from '@/stores/auth';
+import { ref, watch, nextTick, onMounted, watchEffect } from 'vue';
+import gsap from 'gsap';
+
+const authStore = useAuthStore();
+const router = useRouter();
+import { useRoute } from 'vue-router';
+const route = useRoute();
+// ...既存のimportにwatchEffectを追加済みなので削除
+
+const currentViewName = ref('');
+watchEffect(() => {
+  currentViewName.value = route.name ? String(route.name) : '';
+});
+
+const showLogo = ref(false);
+const showLogoImg = ref(false);
+let logoTimeouts: number[] = [];
+
+function clearLogoTimeouts() {
+  logoTimeouts.forEach(id => clearTimeout(id));
+  logoTimeouts = [];
+}
+
+watch(() => authStore.isLoggedIn, async (val) => {
+  clearLogoTimeouts();
+  if (val) {
+    showLogo.value = true;
+    showLogoImg.value = false;
+    await nextTick();
+    // まず白背景のみ表示
+    logoTimeouts.push(window.setTimeout(async () => {
+      showLogoImg.value = true;
+      await nextTick();
+      gsap.fromTo('.logo-img', { opacity: 0 }, { opacity: 1, duration: 0.7 });
+      // 1秒後にロゴをフェードアウト
+      logoTimeouts.push(window.setTimeout(() => {
+        gsap.to('.logo-img', {
+          opacity: 0, duration: 0.7, onComplete: () => {
+            showLogo.value = false;
+            showLogoImg.value = false;
+          }
+        });
+      }, 1000));
+    }, 300)); // 0.3秒白背景のみ
+  } else {
+    showLogo.value = false;
+    showLogoImg.value = false;
+  }
+});
+
+onMounted(() => {
+  // ページ遷移やリロード時にタイムアウトをクリア
+  window.addEventListener('beforeunload', clearLogoTimeouts);
+});
+
+const handleLogout = async () => {
+  await authStore.logout();
+  router.push('/login');
+};
+</script>
+
 <style scoped>
 .logo-overlay {
   position: fixed;
@@ -110,18 +123,20 @@ const handleLogout = async () => {
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: rgba(255,255,255,0.95);
+  background: rgba(255, 255, 255, 0.95);
   z-index: 9999;
   display: flex;
   align-items: center;
   justify-content: center;
 }
+
 .logo-img {
   max-width: 300px;
   width: 60vw;
   height: auto;
-  filter: drop-shadow(0 2px 16px rgba(0,0,0,0.15));
+  filter: drop-shadow(0 2px 16px rgba(0, 0, 0, 0.15));
 }
+
 /* GSAPで制御するためトランジションは不要 */
 
 /* リンク感を消す（stealth-link） */
@@ -130,11 +145,32 @@ const handleLogout = async () => {
   text-decoration: none;
   cursor: pointer;
 }
+
 .stealth-link:visited,
 .stealth-link:active,
 .stealth-link:hover,
 .stealth-link:focus {
-  color: inherit;
+  color:inherit;
   text-decoration: none;
+}
+
+.view-title {
+  background: #fff;
+  margin-top: 2px;
+  margin-bottom: 2px;
+  width: 100vw;
+  left: 0;
+  position: relative;
+  padding: 16px 0;
+  border-radius: 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  text-align: center;
+}
+
+.view-title h2 {
+  margin: 0;
+  font-weight: normal;
+  font-size: 1.3rem;
+  color: #000;
 }
 </style>

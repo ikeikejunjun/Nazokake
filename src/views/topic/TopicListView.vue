@@ -1,5 +1,10 @@
 <template>
     <v-container>
+        <v-col cols="12" class="d-flex justify-end mb-4">
+            <RouterLink to="/topic/post">
+                <v-btn color="primary" prepend-icon="mdi-plus">お題を投稿</v-btn>
+            </RouterLink>
+        </v-col>
         <v-row>
             <v-col cols="12">
                 <v-card v-for="topic in topics" :key="topic.id" class="mb-3" @click="goDetail(topic.id)" hover
@@ -17,11 +22,6 @@
                 </v-card>
             </v-col>
         </v-row>
-        <v-col cols="12" class="d-flex justify-end mb-4">
-            <RouterLink to="/topic/post">
-                <v-btn color="primary" prepend-icon="mdi-plus">お題を投稿</v-btn>
-            </RouterLink>
-        </v-col>
     </v-container>
 </template>
 

@@ -26,48 +26,48 @@ const router = createRouter({
   },
   {
     path: '/login',
-    name: 'Login',
+    name: 'ログイン',
     component: LoginView
   },
   {
     path: '/riddle',
-    name: 'Riddle',
+    name: '謎かけ',
     component: RiddleListView,
     meta: { requiresAuth: true } // 認証が必要なルート
   },
   {
     path: '/riddle/post',
-    name: 'RiddlePost',
+    name: '謎かけ 投稿',
     component: RiddlePostView,
     meta: { requiresAuth: true } // 認証が必要なルート
   },
   {
     path: '/topic',
-    name: 'Topic',
+    name: 'お題',
     component: TopicListView,
     meta: { requiresAuth: true } // 認証が必要なルート
   },
   {
     path: '/topic/:id',
-    name: 'TopicDetail',
+    name: 'お題 詳細',
     component: TopicDetailView,
     meta: { requiresAuth: true } // 認証が必要なルート
   },
   {
     path: '/topic/post',
-    name: 'TopicPost',
+    name: 'お題 投稿',
     component: TopicPostView,
     meta: { requiresAuth: true } // 認証が必要なルート
   },
   {
     path: '/auth/invite',
-    name: 'Invite',
+    name: 'ユーザー招待',
     component: InviteView,
     meta: { requiresAuth: true } // 管理者のみアクセス想定
   },
   {
     path: '/auth/signup',
-    name: 'SignUp',
+    name: 'ユーザー登録',
     component: SignUpView
   },
   {
@@ -76,13 +76,13 @@ const router = createRouter({
   },
   {
     path: '/profile/edit',
-    name: 'ProfileEdit',
+    name: 'プロフィール編集',
     component: ProfileEditView,
     meta: { requiresAuth: true } // 認証が必要なルート
   },
   {
     path: '/profile/:id',
-    name: 'ProfileDetail',
+    name: 'プロフィール詳細',
     component: ProfileDetailView,
     meta: { requiresAuth: true } // 認証が必要なルート
   }
@@ -93,7 +93,7 @@ router.beforeEach(async (to, from, next) => {
   if (to.meta.requiresAuth) {
     const authStore = useAuthStore();
     if (!authStore.isLoggedIn) {
-      next({ name: 'Login' });
+      next({ name: 'ログイン' });
       return;
     }
   }

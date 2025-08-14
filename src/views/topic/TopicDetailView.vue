@@ -1,47 +1,44 @@
 <template>
-    <v-container class="py-8">
-        <v-row justify="center">
-            <v-col cols="12" sm="10" md="8" lg="6">
-                <v-card elevation="6" class="pa-6">
-                    <v-card-title class="text-h5 text-center mb-4">お題詳細</v-card-title>
-                    <v-card-text v-if="topic">
-                        <div class="mb-2">
-                            <span class="font-weight-bold">タイトル：</span>{{ topic.title }}
-                        </div>
-                        <div class="mb-2">
-                            <span class="font-weight-bold">作成日：</span>{{ formatDate(topic.created_at) }}
-                        </div>
-                        <div class="mb-2">
-                            <span class="font-weight-bold">作成者：</span>
-                            <template v-if="topic.profiles && topic.profiles.name">
-                                {{ topic.profiles.name }}
-                            </template>
-                            <template v-else>
-                                {{ topic.created_by }}
-                            </template>
-                        </div>
-                    </v-card-text>
-                    <v-card-text v-else>
-                        <v-alert type="error">お題が見つかりません</v-alert>
-                    </v-card-text>
-                    <v-card-actions>
-                        <RouterLink to="/topic">
-                            <v-btn color="primary" variant="text">一覧に戻る</v-btn>
-                        </RouterLink>
-                                                <template v-if="selectedTopicStore.selectedTopic?.topics?.id === topic?.id">
-                                                    <v-chip color="yellow-darken-2" class="ml-2">現在のお題です</v-chip>
-                                                    <v-btn color="primary" variant="text" :disabled="true">現在のお題に設定する</v-btn>
-                                                </template>
-                                                <template v-else>
-                                                    <v-btn color="primary" variant="text" @click="setCurrentTopic">現在のお題に設定する</v-btn>
-                                                </template>
-                        <v-btn color="red" variant="text" @click="deleteTopic">削除</v-btn>
-                    </v-card-actions>
-                </v-card>
-            </v-col>
-        </v-row>
-        <v-alert v-if="errorMessage" type="error" class="mt-2">{{ errorMessage }}</v-alert>
-    </v-container>
+    <v-row justify="center">
+        <v-col cols="12" sm="10" md="8" lg="6">
+            <v-card elevation="6" class="pa-6">
+                <v-card-text v-if="topic">
+                    <div class="mb-2">
+                        <span class="font-weight-bold">タイトル：</span>{{ topic.title }}
+                    </div>
+                    <div class="mb-2">
+                        <span class="font-weight-bold">作成日：</span>{{ formatDate(topic.created_at) }}
+                    </div>
+                    <div class="mb-2">
+                        <span class="font-weight-bold">作成者：</span>
+                        <template v-if="topic.profiles && topic.profiles.name">
+                            {{ topic.profiles.name }}
+                        </template>
+                        <template v-else>
+                            {{ topic.created_by }}
+                        </template>
+                    </div>
+                </v-card-text>
+                <v-card-text v-else>
+                    <v-alert type="error">お題が見つかりません</v-alert>
+                </v-card-text>
+                <v-card-actions>
+                    <RouterLink to="/topic">
+                        <v-btn color="primary" variant="text">一覧に戻る</v-btn>
+                    </RouterLink>
+                    <template v-if="selectedTopicStore.selectedTopic?.topics?.id === topic?.id">
+                        <v-chip color="yellow-darken-2" class="ml-2">現在のお題です</v-chip>
+                        <v-btn color="primary" variant="text" :disabled="true">現在のお題に設定する</v-btn>
+                    </template>
+                    <template v-else>
+                        <v-btn color="primary" variant="text" @click="setCurrentTopic">現在のお題に設定する</v-btn>
+                    </template>
+                    <v-btn color="red" variant="text" @click="deleteTopic">削除</v-btn>
+                </v-card-actions>
+            </v-card>
+        </v-col>
+    </v-row>
+    <v-alert v-if="errorMessage" type="error" class="mt-2">{{ errorMessage }}</v-alert>
 </template>
 
 
