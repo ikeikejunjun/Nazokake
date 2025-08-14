@@ -1,5 +1,10 @@
 <template>
     <v-container>
+        <v-col cols="12" class="d-flex justify-end mb-4">
+            <RouterLink to="/topic/post">
+                <v-btn color="primary" prepend-icon="mdi-plus">お題を投稿</v-btn>
+            </RouterLink>
+        </v-col>
         <v-row>
             <v-col cols="12">
                 <v-card v-for="topic in topics" :key="topic.id" class="mb-3" @click="goDetail(topic.id)" hover
@@ -10,18 +15,10 @@
                         <v-chip v-if="selectedTopic?.topics?.id === topic.id" color="yellow-darken-2" size="small"
                             class="ml-2">選択中</v-chip>
                     </v-card-title>
-                    <v-card-subtitle>
-                        <span class="font-weight-bold">【投稿者】</span>{{ topic.profiles?.name || topic.created_by }}
-                        ／<span class="font-weight-bold">【投稿日時】</span> {{ formatDate(topic.created_at) }}
-                    </v-card-subtitle>
+                    <PostSubtitleInfo :user_id="topic.created_by" :user_name="topic.profiles?.name" :created_at="topic.created_at" />
                 </v-card>
             </v-col>
         </v-row>
-        <v-col cols="12" class="d-flex justify-end mb-4">
-            <RouterLink to="/topic/post">
-                <v-btn color="primary" prepend-icon="mdi-plus">お題を投稿</v-btn>
-            </RouterLink>
-        </v-col>
     </v-container>
 </template>
 
@@ -32,6 +29,7 @@ import { TopicModel } from '@/models/topic';
 import type { Topic } from '@/models/topic';
 import { useSelectedTopicStore } from '@/stores/selected_topic';
 import { storeToRefs } from 'pinia';
+import PostSubtitleInfo from '@/components/PostSubtitleInfo.vue';
 
 const topics = ref<Topic[]>([]);
 const router = useRouter();

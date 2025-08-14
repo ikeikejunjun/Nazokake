@@ -1,42 +1,39 @@
 <template>
-    <v-container class="py-8">
-        <v-row justify="center">
-            <v-col cols="12" sm="10" md="8" lg="6">
-                <v-card elevation="6" class="pa-6">
-                    <v-card-title class="text-h5 text-center mb-4">なぞかけ投稿</v-card-title>
-                    <v-card-text>
-                        <div v-if="selectedTopicStore.selectedTopic?.topics">
-                            <v-alert type="info" class="mb-4">
-                                【お題】<span class="font-weight-bold">{{ selectedTopicStore.selectedTopic.topics.title
-                                    }}</span>
-                            </v-alert>
-                        </div>
-                        <v-form @submit.prevent="submitRiddle">
-                            <div class="mb-4" style="font-size:1.1em;">
-                                <div><span class="font-weight-bold">{{
-                                    selectedTopicStore.selectedTopic?.topics?.title || '（未選択）' }}</span> とかけて</div>
-                                <div>
-                                    <v-text-field v-model="toku" label="とく（例：○○）" required hide-details
-                                        class="block-input" style="width:100%;max-width:600px;margin:12px 0;" />
-                                </div>
-                                <div>ととく。</div>
-                                <div>その心は、どちらも</div>
-                                <div>
-                                    <v-text-field v-model="kokoro" label="こころ（例：△△）" required hide-details
-                                        class="block-input" style="width:100%;max-width:600px;margin:12px 0;" />
-                                </div>
+    <v-row justify="center">
+        <v-col cols="12" sm="12" md="10" lg="8">
+            <v-card elevation="6" class="pa-6">
+                <v-card-text>
+                    <div v-if="selectedTopicStore.selectedTopic?.topics">
+                        <v-alert type="info" class="mb-4">
+                            【お題】<span class="font-weight-bold">{{ selectedTopicStore.selectedTopic.topics.title
+                            }}</span>
+                        </v-alert>
+                    </div>
+                    <v-form @submit.prevent="submitRiddle">
+                        <div class="mb-4" style="font-size:1.1em;">
+                            <div><span class="font-weight-bold">{{
+                                selectedTopicStore.selectedTopic?.topics?.title || '（未選択）' }}</span> とかけて</div>
+                            <div>
+                                <v-text-field v-model="toku" label="とく（例：○○）" required hide-details class="block-input"
+                                    style="width:100%;max-width:600px;margin:12px 0;" />
                             </div>
-                            <v-btn type="submit" color="primary" :loading="loading" @click="playExplosion"
-                                :disabled="!toku || !kokoro">投稿する</v-btn>
-                            <div ref="explosion" class="explosion-anim" />
-                            <v-alert v-if="errorMessage" type="error" class="mt-2">{{ errorMessage }}</v-alert>
-                            <v-alert v-if="successMessage" type="success" class="mt-2">{{ successMessage }}</v-alert>
-                        </v-form>
-                    </v-card-text>
-                </v-card>
-            </v-col>
-        </v-row>
-    </v-container>
+                            <div>ととく。</div>
+                            <div>その心は、どちらも</div>
+                            <div>
+                                <v-text-field v-model="kokoro" label="こころ（例：△△）" required hide-details
+                                    class="block-input" style="width:100%;max-width:600px;margin:12px 0;" />
+                            </div>
+                        </div>
+                        <v-btn type="submit" color="primary" :loading="loading" @click="playExplosion"
+                            :disabled="!toku || !kokoro">投稿する</v-btn>
+                        <div ref="explosion" class="explosion-anim" />
+                        <v-alert v-if="errorMessage" type="error" class="mt-2">{{ errorMessage }}</v-alert>
+                        <v-alert v-if="successMessage" type="success" class="mt-2">{{ successMessage }}</v-alert>
+                    </v-form>
+                </v-card-text>
+            </v-card>
+        </v-col>
+    </v-row>
 </template>
 
 <script setup lang="ts">

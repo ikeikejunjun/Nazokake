@@ -1,23 +1,20 @@
 <template>
-    <v-container class="py-8">
-        <v-row justify="center">
-            <v-col cols="12" sm="8" md="6" lg="4">
-                <v-card elevation="6" class="pa-6">
-                    <v-card-title class="text-h5 text-center mb-4">プロフィール編集</v-card-title>
-                    <v-card-text>
-                        <v-form @submit.prevent="onSave" ref="formRef" v-model="valid">
-                            <v-text-field v-model="name" label="名前" :rules="nameRules" required class="mb-4" />
-                            <v-textarea v-model="bio" label="自己紹介（最大500文字）" :rules="bioRules" counter="500"
-                                maxlength="500" rows="5" class="mb-4" />
-                            <v-btn :loading="loading" color="primary" type="submit" block>保存</v-btn>
-                        </v-form>
-                        <v-alert v-if="errorMessage" type="error" class="mt-4">{{ errorMessage }}</v-alert>
-                        <v-alert v-if="successMessage" type="success" class="mt-4">{{ successMessage }}</v-alert>
-                    </v-card-text>
-                </v-card>
-            </v-col>
-        </v-row>
-    </v-container>
+    <v-row justify="center">
+        <v-col cols="12" sm="12" md="10" lg="8">
+            <v-card elevation="6" class="pa-6">
+                <v-card-text>
+                    <v-form @submit.prevent="onSave" ref="formRef" v-model="valid">
+                        <v-text-field v-model="name" label="名前" :rules="nameRules" required class="mb-4" />
+                        <v-textarea v-model="bio" label="自己紹介（最大500文字）" :rules="bioRules" counter="500" maxlength="500"
+                            rows="5" class="mb-4" />
+                        <v-btn :loading="loading" color="primary" type="submit" block>保存</v-btn>
+                    </v-form>
+                    <v-alert v-if="errorMessage" type="error" class="mt-4">{{ errorMessage }}</v-alert>
+                    <v-alert v-if="successMessage" type="success" class="mt-4">{{ successMessage }}</v-alert>
+                </v-card-text>
+            </v-card>
+        </v-col>
+    </v-row>
 </template>
 
 <script setup lang="ts">

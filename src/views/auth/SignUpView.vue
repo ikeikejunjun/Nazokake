@@ -1,28 +1,25 @@
 <template>
-    <v-container class="py-8">
-        <v-row justify="center">
-            <v-col cols="12" sm="8" md="6" lg="4">
-                <v-card elevation="6" class="pa-6">
-                    <v-card-title class="text-h5 text-center mb-4">パスワード設定</v-card-title>
-                    <v-card-text>
-                        <div class="mb-4 text-center">
-                            <span v-if="email">{{ email }}</span>
-                        </div>
-                        <v-form @submit.prevent="onSignUp" ref="formRef" v-model="valid">
-                            <v-text-field v-model="password" label="パスワード" :rules="passwordRules" type="password"
-                                required autocomplete="new-password" class="mb-4" />
-                            <v-btn :loading="loading" color="primary" type="submit" block>パスワードを設定</v-btn>
-                        </v-form>
-                        <v-alert v-if="errorMessage" type="error" class="mt-4">{{ errorMessage }}</v-alert>
-                        <v-alert v-if="successMessage" type="success" class="mt-4">{{ successMessage }}</v-alert>
-                        <div class="mt-4 text-center">
-                            <RouterLink to="/login">ログインはこちら</RouterLink>
-                        </div>
-                    </v-card-text>
-                </v-card>
-            </v-col>
-        </v-row>
-    </v-container>
+    <v-row justify="center">
+        <v-col cols="12" sm="12" md="10" lg="8">
+            <v-card elevation="6" class="pa-6">
+                <v-card-text>
+                    <div class="mb-4 text-center">
+                        <span v-if="email">{{ email }}</span>
+                    </div>
+                    <v-form @submit.prevent="onSignUp" ref="formRef" v-model="valid">
+                        <v-text-field v-model="password" label="パスワード" :rules="passwordRules" type="password" required
+                            autocomplete="new-password" class="mb-4" />
+                        <v-btn :loading="loading" color="primary" type="submit" block>パスワードを設定</v-btn>
+                    </v-form>
+                    <v-alert v-if="errorMessage" type="error" class="mt-4">{{ errorMessage }}</v-alert>
+                    <v-alert v-if="successMessage" type="success" class="mt-4">{{ successMessage }}</v-alert>
+                    <div class="mt-4 text-center">
+                        <RouterLink to="/login">ログインはこちら</RouterLink>
+                    </div>
+                </v-card-text>
+            </v-card>
+        </v-col>
+    </v-row>
 </template>
 
 <script setup lang="ts">
