@@ -71,16 +71,16 @@ const hasMore = ref(true);
 const errorMessage = ref('');
 
 // 初期表示処理
-onMounted(() => {
+onMounted(async () => {
     selectedTopicStore.fetchSelectedTopic();
     selectedTopicStore.subscribeRealtime();
-    fetchTopic();
+    await fetchTopic();
+    fetchRiddles();
 });
 
 // お題を取得する
 const fetchTopic = async () => {
     topic.value = await TopicModel.fetchById(route.params.id as string);
-    fetchRiddles();
 };
 
 // 現在のお題テーブルがあるので、そのレコードを更新する

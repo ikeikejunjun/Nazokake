@@ -27,8 +27,9 @@ const pageSize = 50;
 const hasMore = ref(true);
 const showAll = ref(false);
 
-onMounted(() => {
-    selectedTopicStore.fetchSelectedTopic();
+onMounted(async () => {
+    // fetchSelectedTopicの完了を待つ
+    await selectedTopicStore.fetchSelectedTopic();
     fetchRiddles(true);
 });
 
