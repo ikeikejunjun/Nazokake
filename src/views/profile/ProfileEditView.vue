@@ -41,7 +41,7 @@ const bioRules = [
 
 onMounted(async () => {
     // ログインユーザーのプロフィール取得
-    const profile = await ProfileModel.fetchById(authStore.currentProfile?.id!);
+    const profile = await ProfileModel.fetchById(authStore.user_id);
     if (profile) {
         name.value = profile.name || '';
         bio.value = profile.bio || '';
@@ -53,7 +53,7 @@ const onSave = async () => {
     successMessage.value = '';
     if (!valid.value) return;
     loading.value = true;
-    const { error } = await ProfileModel.update(authStore.currentProfile?.id!, {
+    const { error } = await ProfileModel.update(authStore.user_id, {
         name: name.value,
         bio: bio.value,
     });

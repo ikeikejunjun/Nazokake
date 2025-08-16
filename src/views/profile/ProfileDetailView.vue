@@ -10,7 +10,7 @@
                             <div>{{ route.params.id }}</div>
                         </div>
                         <div class="mb-2 pa-2 font-weight-bold">過去のなぞかけ投稿</div>
-                        <RiddleListCard :riddles="riddles" :hasMore="hasMore" :currentUserId="authStore.currentProfile?.id"
+                        <RiddleListCard :riddles="riddles" :hasMore="hasMore" :currentUserId="authStore.user_id"
                             @fetch-more="fetchRiddles" />
                     </v-card-text>
                 </v-card>

@@ -93,14 +93,14 @@ const submitRiddle = async () => {
         errorMessage.value = 'お題が選択されていません';
         return;
     }
-    if (!authStore.currentProfile?.id) {
+    if (!authStore.user_id) {
         errorMessage.value = 'ユーザー情報が取得できません';
         return;
     }
     loading.value = true;
     const { error } = await RiddleModel.create({
         topic_id: selectedTopicStore.selectedTopic.topics.id,
-        user_id: authStore.currentProfile.id,
+        user_id: authStore.user_id,
         toku: toku.value,
         kokoro: kokoro.value,
     });

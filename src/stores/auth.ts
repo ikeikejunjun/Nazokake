@@ -1,28 +1,41 @@
 // src/stores/auth.ts
 import { defineStore } from 'pinia';
 import { supabase } from '@/lib/supabase';
-import type { Profile } from '@/models/profile';
 
 export const useAuthStore = defineStore('auth', {
     state: () => ({
-        currentProfile: null as Profile | null,
+        isLogin: false,
+        user_id: '' as string,
         email: '' as string,
     }),
     actions: {
-        setProfile(profile: Profile, email: string) {
-            this.currentProfile = profile;
+        setProfile(user_id: string, email: string) {
+            this.user_id = user_id;
             this.email = email;
+            this.isLogin = true;
         },
         clearProfile() {
-            this.currentProfile = null;
+            this.user_id = '';
             this.email = '';
+            this.isLogin = false;
         },
+        // ログアウト
         async logout() {
             await supabase.auth.signOut();
             this.clearProfile();
         },
+        // セッションの復元
+        async restoreSession() {
+            const { data, error } = await supabase.auth.getSession();
+            if (error || !data.session) {
+                console.error('Error restoring session:', error);
+                this.clearProfile();
+                return;
+            }
+            this.setProfile(data.session.user.id, data.session.user.email ?? '');
+        }
     },
     getters: {
-        isLoggedIn: (state) => state.currentProfile != null,
+        isLoggedIn: (state) => state.isLogin,
     },
 });

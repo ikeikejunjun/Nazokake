@@ -7,7 +7,7 @@
                 <v-btn color="primary" prepend-icon="mdi-plus">投稿</v-btn>
             </RouterLink>
         </v-col>
-        <RiddleListCard :riddles="riddles" :hasMore="hasMore" :currentUserId="authStore.currentProfile?.id"
+        <RiddleListCard :riddles="riddles" :hasMore="hasMore" :currentUserId="authStore.user_id"
             @fetch-more="fetchRiddles" />
     </v-container>
 </template>
