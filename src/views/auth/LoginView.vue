@@ -51,7 +51,7 @@ const login = async () => {
       return;
     }
     authStore.setProfile(
-      userProfile.value!,
+      userProfile.value.id,
       data.user.email ?? ''
     )
     await router.push('/riddle');

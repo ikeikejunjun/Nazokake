@@ -22,7 +22,8 @@ const router = createRouter({
   routes: [
   {
     path: '/',
-    redirect: '/login' // 初期アクセスはログインへ
+    redirect: '/riddle', // 初期アクセスは謎かけへ
+    meta: { requiresAuth: true } // 認証が必要なルート
   },
   {
     path: '/login',

@@ -37,7 +37,7 @@ const postTopic = async () => {
     }
     const newTopic = {
         title: title.value,
-        created_by: authStore.currentProfile?.id ?? '',
+        created_by: authStore.user_id,
     };
     const { error } = await TopicModel.create(newTopic);
     if (error) {

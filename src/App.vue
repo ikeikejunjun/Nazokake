@@ -105,9 +105,10 @@ watch(() => authStore.isLoggedIn, async (val) => {
   }
 });
 
-onMounted(() => {
+onMounted(async () => {
   // ページ遷移やリロード時にタイムアウトをクリア
   window.addEventListener('beforeunload', clearLogoTimeouts);
+  await authStore.restoreSession();
 });
 
 const handleLogout = async () => {

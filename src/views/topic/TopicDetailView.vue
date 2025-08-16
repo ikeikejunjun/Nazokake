@@ -36,7 +36,7 @@
                     <v-btn color="red" variant="text" @click="deleteTopic">削除</v-btn>
                 </v-card-actions>
                 <div class="mb-2 pa-2 font-weight-bold">このお題の投稿</div>
-                <RiddleListCard :riddles="riddles" :hasMore="hasMore" :currentUserId="authStore.currentProfile?.id"
+                <RiddleListCard :riddles="riddles" :hasMore="hasMore" :currentUserId="authStore.user_id"
                     @fetch-more="fetchRiddles" />
             </v-card>
         </v-col>
